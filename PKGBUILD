@@ -6,6 +6,7 @@ pkgrel=1
 pkgdesc="Keyboard fix for m116-SS7300 laptop"
 arch=(any)
 license=('WTFPL')
+install='PKGBUILD'
  
 
 prepare(){
@@ -41,3 +42,18 @@ build() {
   cp $srcdir/etc/systemd/system/fix-laptop-issues.service $pkgdir/etc/systemd/system/
   cp $srcdir/usr/local/bin/fix-laptop-issues.sh $pkgdir/usr/local/bin/
 }
+
+
+post_install() {
+    echo "Enabling systemd service"
+    systemctl enable fix-laptop-issues.service
+    echo "Starting systemd service"
+    systemctl start fix-laptop-issues.service
+}
+
+post_upgrade() {
+    echo "Reloading systemd"
+    systemctl daemon-reload
+}
+
+
